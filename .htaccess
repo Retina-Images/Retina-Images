@@ -1,0 +1,8 @@
+<IfModule mod_rewrite.c>
+
+  Options +FollowSymlinks
+  RewriteEngine On
+
+  RewriteRule \.(?:jpe?g|gif|png)$ adaptive-images.php
+  
+</IfModule>
