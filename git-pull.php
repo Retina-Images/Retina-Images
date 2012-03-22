@@ -10,6 +10,7 @@ $commands[] = "curl -L --insecure https://github.com/{$user}/{$repo}/tarball/{$b
 $commands[] = "tar -xzf {$branch}.tar.gz";
 $commands[] = "rm $branch.tar.gz";
 $commands[] = "mv {$user}-{$repo}*/* .";
+$commands[] = "mv {$user}-{$repo}*/.[^.]* .";
 $commands[] = "rm {$user}-{$repo}*";
 
 $command = implode(';', $commands);
