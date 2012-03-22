@@ -20,8 +20,8 @@ h2. Drawbacks
 
 * <code><img></code> tags must have either a width or height attribute specified.
 * CSS background images (with high-res version) must have a <code>background-size</code> property of the following:
- * if the image is the same size as the box (i.e. image replacement) you can use <code>background-size: contain;</code>
- * otherwise you can use static sizes: <code>background-size: <image_width> <image_height>;</code>
+** if the image is the same size as the box (i.e. image replacement) you can use <code>background-size: contain;</code>
+** otherwise you can use static sizes: <code>background-size: <image_width> <image_height>;</code>
 
 h2. License
 
