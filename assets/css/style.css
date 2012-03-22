@@ -228,8 +228,12 @@ h1 small {
   font-size: 0.65em;
 }
 
-
-
+table {
+  width: 100%;
+}
+  thead {
+    font-weight: bold;
+  }
 
 
 
