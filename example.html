@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+
+	<script>document.cookie='devicePixelRatio='+((window.devicePixelRatio === undefined) ? 1 : window.devicePixelRatio)+'; path=/';</script>
+
+	<title>Retina Images Example</title>
+	<meta name="description" content="">
+
+	<!-- Mobile viewport optimized: h5bp.com/viewport -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+	<noscript><style id="devicePixelRatio" media="only screen and (-moz-min-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2)">#devicePixelRatio{background-image:url("retinaimages.php?devicePixelRatio=2")}</style></noscript>
+
+	<header>
+		<h1>Retina Images <small>Automatic Image Upscaling</small></h1>
+	</header>
+	<div role="main">
+		<strong>Pixel Ratio:</strong> <script>document.write((function(name){var nameEQ = name + "=";var ca = document.cookie.split(';');for(var i=0;i < ca.length;i++) {var c = ca[i];while (c.charAt(0)==' ') c = c.substring(1,c.length);if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);	}return null;})('devicePixelRatio'));</script>
+		<table colspacing="0" colpadding="0">
+			<thead>
+				<tr>
+					<td></td>
+					<td>Regular Image</td>
+					<td>Retina Image</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>&lt;img /></code> Element</td>
+					<td><img src="assets/img/calendar_nr.png" width="64" /></td>
+					<td><img src="assets/img/calendar.png" width="64" /></td>
+				</tr>
+				<tr>
+					<td>CSS Background</td>
+					<td><div style="background-image:url(assets/img/messages_nr.png); background-size:contain; height:64px; width:64px;"></div></td>
+					<td><div style="background-image:url(assets/img/messages.png);    background-size:contain; height:64px; width:64px;"></div></td>
+				</tr>
+				<tr>
+					<td>Inserted with Javascript</td>
+					<td><script>document.write('<img src="assets/img/note_nr.png" width="64" />');</script></td>
+					<td><script>document.write('<img src="assets/img/note.png" width="64" />');</script></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<footer>
+		<small>by <a href="http://complexcompulsions.com">Jeremy Worboys</a>.</small>
+	</footer>
+
+</body>
+</html>
