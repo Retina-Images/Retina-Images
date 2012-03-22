@@ -4,7 +4,6 @@
 	<meta charset="utf-8">
 
 	<script>document.cookie='devicePixelRatio='+((window.devicePixelRatio === undefined) ? 1 : window.devicePixelRatio)+'; path=/';</script>
-	<noscript><style media="only screen and (-webkit-min-device-pixel-ratio: 2)" src="/retinaimages.php?setDPR=2" /></noscript>
 
 	<title>Retina Images Example</title>
 	<meta name="description" content="">
@@ -15,6 +14,9 @@
 	<link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
+
+	<noscript><style id="devicePixelRatio" media="only screen and (-moz-min-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2)">#devicePixelRatio{background-image:url("retinaimages.php?devicePixelRatio=2")}</style></noscript>
+
 	<header>
 		<h1>Retina Images <small>Automatic Image Upscaling</small></h1>
 	</header>

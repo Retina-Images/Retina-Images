@@ -3,6 +3,6 @@
   Options +FollowSymlinks
   RewriteEngine On
 
-  RewriteRule \.(?:jpe?g|gif|png)$ retinaimages.php
+  RewriteRule \.(?:jpe?g|gif|png|bmp)$ retinaimages.php
 
 </IfModule>

@@ -4,32 +4,48 @@
 	$requested_uri  = parse_url(urldecode($_SERVER['REQUEST_URI']), PHP_URL_PATH);
 	$requested_file = basename($requested_uri);
 	$source_file    = $document_root.$requested_uri;
-	$retina_file    = pathinfo($source_file, PATHINFO_DIRNAME).'/'.pathinfo($source_file, PATHINFO_FILENAME).'@2x.'.pathinfo($source_file, PATHINFO_EXTENSION);
+	$source_ext     = strtolower(pathinfo($source_file, PATHINFO_EXTENSION));
 
-	if (file_exists($retina_file)) {
-		$filename = $retina_file;
-	}
-	else {
-		$filename = $source_file;
+	// Image was requested
+	if (in_array($source_ext, array('png', 'gif', 'jpeg', 'bmp'))) {
+
+		// Check if DPR is high enough to warrant retina image
+		if (isset($_COOKIE['devicePixelRatio']) && intval($_COOKIE['devicePixelRatio']) > 1) {
+			// Check if retina image exists
+			$retina_file = pathinfo($source_file, PATHINFO_DIRNAME).'/'.pathinfo($source_file, PATHINFO_FILENAME).'@2x.'.pathinfo($source_file, PATHINFO_EXTENSION);
+			if (file_exists($retina_file)) {
+				$source_file = $retina_file;
+			}
+		}
+
+		// Send headers
+		if (in_array($source_ext, array('png', 'gif', 'jpeg', 'bmp'))) {
+			header("Content-Type: image/".$source_ext);
+		} else {
+			header("Content-Type: image/jpeg");
+		}
+		header('Content-Length: '.filesize($source_file));
+
+		// Send file
+		readfile($source_file);
+		exit();
 	}
 
-	$extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-	if (in_array($extension, array('png', 'gif', 'jpeg'))) {
-		header("Content-Type: image/".$extension);
-	} else {
+	// DPR value was sent
+	elseif(isset($_GET['devicePixelRatio'])) {
+		$dpr = $_GET['devicePixelRatio'];
+
+		// Tell the browser we are sending an image
 		header("Content-Type: image/jpeg");
-	}
-	header('Content-Length: '.filesize($filename));
-	readfile($filename);
 
-function sendErrorImage($message) {
-  $im         = ImageCreateTrueColor(800, 200);
-  $text_color = ImageColorAllocate($im, 233, 14, 91);
-  ImageString($im, 1, 5, 5, $message, $text_color);
-  header("Cache-Control: no-store");
-  header('Expires: '.gmdate('D, d M Y H:i:s', time()-1000).' GMT');
-  header('Content-Type: image/jpeg');
-  ImageJpeg($im);
-  ImageDestroy($im);
-  exit();
-}
+		// Validate value before setting cookie
+		if (''.intval($dpr) !== $dpr) {
+			$dpr = '1';
+		}
+
+		setcookie('devicePixelRatio', $dpr);
+		exit();
+	}
+
+	// Respond with an empty content
+	header('HTTP/1.1 204 No Content');
