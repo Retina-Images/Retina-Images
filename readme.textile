@@ -1,0 +1,3 @@
+h1. Retina Images
+
+Retina Images serves images based on the device in use by the viewer. Once setup on your website (very simple!) all you have to do is create a high dpi image for each image you would like optimised for retina displays
