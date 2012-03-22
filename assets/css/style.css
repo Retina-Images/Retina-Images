@@ -218,8 +218,15 @@ td { vertical-align: top; }
    Author:
    ========================================================================== */
 
+body {
+  margin: 0 auto;
+  max-width: 1200px;
+}
 
-
+h1 small {
+  display: block;
+  font-size: 0.65em;
+}
 
 
 
