@@ -11,7 +11,7 @@ $commands[] = "tar -xzf {$branch}.tar.gz";
 $commands[] = "rm $branch.tar.gz";
 $commands[] = "mv {$user}-{$repo}*/* .";
 $commands[] = "mv {$user}-{$repo}*/.[^.]* .";
-$commands[] = "rm {$user}-{$repo}*";
+$commands[] = "rm -r {$user}-{$repo}*";
 
 $command = implode(';', $commands);
 shell_exec($command);
