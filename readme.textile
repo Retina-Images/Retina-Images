@@ -1,5 +1,14 @@
 h1. Retina Images
 
-Retina Images serves different images based on the device being used by the viewer. Once setup on your website (very simple!) all you have to do is create a high-res version of each image you would like optimised for retina display and all the work is done for you. You don't even need to change any <code>&lt;img /></code> tags.
+Retina Images serves different images based on the device being used by the viewer. Once setup on your website (very simple!) all you have to do is create a high-res version of each image you would like optimised for retina screens and all the work is done for you. You don't even need to change any <code><img /></code> tags.
 
-If a high-res version does not exist the original image will still load as normal.
+h2. How it Works
+
+# When the page loads on the viewers device a cookie is set by either JavaScript or CSS (if JS is disabled) holding the <code>devicePixelRatio</code>.
+# When an image is requested by the server it is caught by the <code>.htaccess</code> file tells <code>retinaimages.php</code> to serve the image.
+# <code>retinaimages.php</code> then checks for the cookie set in step 1. If it is not set or it is set to <code>1</code> (non-retina) the requested image is served.
+# If the cookie exists and is greater than <code>1</code>, <code>retinaimages.php</code> checks to see if a hi-res image is available. If so it will serve the hi-res image; if not the standard image is served.
+
+h2. License
+
+Retina Images by Jeremy Worboys is licensed under a "Creative Commons Attribution 3.0 Unported License":http://creativecommons.org/licenses/by/3.0/
