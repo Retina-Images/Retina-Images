@@ -4,10 +4,10 @@ Retina Images serves different images based on the device being used by the view
 
 h2. How it Works
 
-# When the page loads on the viewers device a cookie is set by either JavaScript or CSS (if JS is disabled) holding the <code>devicePixelRatio</code>.
+# When the page loads on the viewers device, a cookie holding the <code>devicePixelRatio</code> is set by either JavaScript or CSS (if JS is disabled).
 # When an image is requested by the server it is caught by the <code>.htaccess</code> file tells <code>retinaimages.php</code> to serve the image.
 # <code>retinaimages.php</code> then checks for the cookie set in step 1. If it is not set or it is set to <code>1</code> (non-retina) the requested image is served.
-# If the cookie exists and is greater than 1, <code>retinaimages.php</code> checks to see if a hi-res image is available. If so it will serve the hi-res image; if not the standard image is served.
+# If the cookie exists and is greater than 1, <code>retinaimages.php</code> checks to see if a high-res image is available. If so it will serve the high-res image; if not the standard image is served.
 
 h2. Benfits
 
