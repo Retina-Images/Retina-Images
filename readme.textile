@@ -28,7 +28,7 @@ h2. Benfits
 h2. Drawbacks
 
 * <code><img></code> tags must have either a width or height attribute specified.
-* CSS background images must have a background-size property. See CSS Images for details.
+* CSS background images must have a background-size property. See "CSS Images":http://retina-images.complexcompulsions.com#setupcss for details.
 
 h2. License
 
