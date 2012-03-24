@@ -1,28 +1,35 @@
 h1. Retina Images
 
-Retina Images serves different images based on the device being used by the viewer. Once setup on your website (very simple!) all you have to do is create a high-res version of each image you would like optimised for retina screens and all the work is done for you. You don't even need to change any <code><img></code> tags.
+Retina Images serves different images based on the device being used by the viewer.
+
+Once setup on your website (very simple!) all you have to do is create a high-res version of each image you would like optimised for retina screens and all the work is done for you. You don’t even need to change any <code>&lt;img&gt;</code> tags (providing they have a height or width).to change any <code><img></code> tags.
 
 h2. How it Works
 
 # When the page loads on the viewers device, a cookie holding the <code>devicePixelRatio</code> is set by either JavaScript or CSS (if JS is disabled).
-# When an image is requested by the server it is caught by the <code>.htaccess</code> file tells <code>retinaimages.php</code> to serve the image.
-# <code>retinaimages.php</code> then checks for the cookie set in step 1. If it is not set or it is set to <code>1</code> (non-retina) the requested image is served.
-# If the cookie exists and is greater than 1, <code>retinaimages.php</code> checks to see if a high-res image is available. If so it will serve the high-res image; if not the standard image is served.
+# When an image is requested by the server, the <code>.htaccess</code> file tells <code>retinaimages.php</code> to serve the image instead.
+# <code>retinaimages.php</code> then checks for the following conditions:
+#* A cookie holding <code>devicePixelRatio</code> exists.
+#* The value set in the cookie is greater than 1.
+#* A high-res version of the image exists.
+# If any of the above are false, it will send the regular image. Otherwise, the high-res image is sent in its place.
+
+h2. Installation & Examples
+
+Visit "http://retina-images.complexcompulsions.com":http://retina-images.complexcompulsions.com for installation instructions and a set of demonstrations.
 
 h2. Benfits
 
-* All images standard bitmap images are able to be served as high-res.
-* Fallback to standard-res if high-res image isn't available. 
-* Fallback to standard-res if both JavaScript and CSS are disabled (rare.)
 * Only one image is downloaded by the viewer.
+* All standard raster images (.jpg, .png, .gif & .bmp) are able to be served as high-res.
+* Fallback to regular image if high-res image isn’t available.
+* Fallback to regular image if JavaScript and CSS or Cookies are disabled.
 
 h2. Drawbacks
 
 * <code><img></code> tags must have either a width or height attribute specified.
-* CSS background images (with high-res version) must have a <code>background-size</code> property of the following:
-** if the image is the same size as the box (i.e. image replacement) you can use <code>background-size: contain;</code>
-** otherwise you can use static sizes: <code>background-size: <image_width> <image_height>;</code>
+* CSS background images must have a background-size property. See CSS Images for details.
 
 h2. License
 
-Retina Images by Jeremy Worboys is licensed under a "Creative Commons Attribution 3.0 Unported License":http://creativecommons.org/licenses/by/3.0/
+Retina Images by "Jeremy Worboys":http://complexcompulsions.com is licensed under a "Creative Commons Attribution 3.0 Unported License":http://creativecommons.org/licenses/by/3.0/

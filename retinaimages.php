@@ -1,4 +1,5 @@
 <?php
+	/* Version: 1.0 */
 
 	$document_root  = $_SERVER['DOCUMENT_ROOT'];
 	$requested_uri  = parse_url(urldecode($_SERVER['REQUEST_URI']), PHP_URL_PATH);
