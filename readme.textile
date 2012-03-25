@@ -2,7 +2,7 @@ h1. Retina Images
 
 Retina Images serves different images based on the device being used by the viewer.
 
-Once setup on your website (very simple!) all you have to do is create a high-res version of each image you would like optimised for retina screens and all the work is done for you. You don’t even need to change any <code>&lt;img&gt;</code> tags (providing they have a height or width).to change any <code><img></code> tags.
+Once setup on your website (very simple!) all you have to do is create a high-res version of each image you would like optimised for retina screens and all the work is done for you. You don’t even need to change any <code><img></code> tags (providing they have a height or width).to change any <code><img></code> tags.
 
 h2. How it Works
 
