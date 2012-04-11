@@ -8,7 +8,7 @@
 	$source_ext     = strtolower(pathinfo($source_file, PATHINFO_EXTENSION));
 
 	// Image was requested
-	if (in_array($source_ext, array('png', 'gif', 'jpeg', 'bmp'))) {
+	if (in_array($source_ext, array('png', 'gif', 'jpg', 'jpeg', 'bmp'))) {
 
 		// Check if DPR is high enough to warrant retina image
 		if (isset($_COOKIE['devicePixelRatio']) && intval($_COOKIE['devicePixelRatio']) > 1) {
