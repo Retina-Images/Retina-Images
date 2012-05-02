@@ -1,8 +1,22 @@
 <IfModule mod_rewrite.c>
 
-  Options +FollowSymlinks
-  RewriteEngine On
+	Options +FollowSymlinks
+	RewriteEngine On
 
-  RewriteRule \.(?:jpe?g|gif|png|bmp)$ retinaimages.php
+	# Option 1 (default)
+	# ==================
+	# Use this if your website runs in the root of the domain.
+	# i.e. http://example.com/index.html
+	#
+	RewriteBase /
+	RewriteRule \.(?:jpe?g|gif|png|bmp)$ /retinaimages.php
+
+	# Option 2
+	# ==================
+	# Use this if your website runs in a sub-directory.
+	# i.e. http://example.com/website/directory/index.html
+	#
+	#RewriteBase /website/directory
+	#RewriteRule \.(?:jpe?g|gif|png|bmp)$ /website/directory/retinaimages.php
 
 </IfModule>
