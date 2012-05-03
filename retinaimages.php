@@ -2,7 +2,7 @@
 	
 	define('DEBUG', false);
 
-	/* Version: 1.1 */
+	/* Version: 1.2 */
 
 	$document_root  = $_SERVER['DOCUMENT_ROOT'];
 	$requested_uri  = parse_url(urldecode($_SERVER['REQUEST_URI']), PHP_URL_PATH);
@@ -36,8 +36,10 @@
 		}
 
 		// Close debug session if open
-		if (DEBUG) { fwrite($_debug_fh, "sending file:      {$source_file}\n\n"); }
-		if (DEBUG) { fclose($_debug_fh); }
+		if (DEBUG) {
+			fwrite($_debug_fh, "sending file:      {$source_file}\n\n");
+			fclose($_debug_fh);
+		}
 
 		// Send headers
 		if (in_array($source_ext, array('png', 'gif', 'jpeg', 'bmp'))) {
@@ -56,8 +58,8 @@
 	elseif(isset($_GET['devicePixelRatio'])) {
 		$dpr = $_GET['devicePixelRatio'];
 
-		// Tell the browser we are sending an image
-		header("Content-Type: image/jpeg");
+		// Respond with a success content
+		header('HTTP/1.1 200 OK');
 
 		// Validate value before setting cookie
 		if (''.intval($dpr) !== $dpr) {
