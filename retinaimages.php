@@ -56,6 +56,11 @@
 			date_default_timezone_set('GMT');
 			header('Expires: '.gmdate('D, d M Y H:i:s', time()+CACHE_TIME).' GMT');
 		}
+		if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && (strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == filemtime($source_file))) {
+			// File in cache hasn't change
+			header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($source_file)).' GMT', true, 304);
+			exit();
+		}
 
 		// Send image headers
 		if (in_array($source_ext, array('png', 'gif', 'jpeg', 'bmp'))) {
