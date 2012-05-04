@@ -3,6 +3,7 @@
 	/* Version: 1.2 */
 	
 	define('DEBUG',              false);    // Write debugging information to a log file
+	define('SEND_PRAGMA',        true);     // 
 	define('SEND_EXPIRES',       true);     // 
 	define('SEND_CACHE_CONTROL', true);     // 
 	define('CACHE_TIME',         24*60*60); // default: 1 day
@@ -44,7 +45,19 @@
 			fclose($_debug_fh);
 		}
 
-		// Send headers
+		// Send cache headers
+		if (SEND_PRAGMA) {
+			header('Pragma: private');  
+		}
+		if (SEND_CACHE_CONTROL) {
+			header('Cache-Control: private, max-age='.CACHE_TIME.', pre-check='.CACHE_TIME);  
+		}
+		if (SEND_EXPIRES) {
+			date_default_timezone_set('GMT');
+			header('Expires: '.gmdate('D, d M Y H:i:s', time()+CACHE_TIME).' GMT');
+		}
+
+		// Send image headers
 		if (in_array($source_ext, array('png', 'gif', 'jpeg', 'bmp'))) {
 			header("Content-Type: image/".$source_ext);
 		}
@@ -52,13 +65,6 @@
 			header("Content-Type: image/jpeg");
 		}
 		header('Content-Length: '.filesize($source_file));
-		if (SEND_CACHE_CONTROL) {
-			header('Cache-Control: max-age='.CACHE_TIME);  
-		}
-		if (SEND_EXPIRES) {
-			date_default_timezone_set('GMT');
-			header('Expires: '.gmdate('D, m M Y G:i:s', time()+CACHE_TIME).'   GMT');
-		}
 
 		// Send file
 		readfile($source_file);
