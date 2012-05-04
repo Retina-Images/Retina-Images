@@ -2,9 +2,10 @@
 
 	/* Version: 1.2 */
 	
-	define('DEBUG',        false);       // Write debugging information to a log file
-	define('SEND_EXPIRES', true);        // 
-	define('EXPIRES_TIME', 24*60*60); // default: 1 day
+	define('DEBUG',              false);    // Write debugging information to a log file
+	define('SEND_EXPIRES',       true);     // 
+	define('SEND_CACHE_CONTROL', true);     // 
+	define('CACHE_TIME',         24*60*60); // default: 1 day
 
 	$document_root  = $_SERVER['DOCUMENT_ROOT'];
 	$requested_uri  = parse_url(urldecode($_SERVER['REQUEST_URI']), PHP_URL_PATH);
@@ -51,9 +52,12 @@
 			header("Content-Type: image/jpeg");
 		}
 		header('Content-Length: '.filesize($source_file));
+		if (SEND_CACHE_CONTROL) {
+			header('Cache-Control: max-age='.CACHE_TIME);  
+		}
 		if (SEND_EXPIRES) {
 			date_default_timezone_set('GMT');
-			header('Expires: '.gmdate('D, m M Y G:i:s', time()+EXPIRES_TIME).' GMT');
+			header('Expires: '.gmdate('D, m M Y G:i:s', time()+CACHE_TIME).'   GMT');
 		}
 
 		// Send file
