@@ -49,7 +49,7 @@
 			header('Expires: '.gmdate('D, d M Y H:i:s', time()+CACHE_TIME).' GMT', true);
 		}
 		if (SEND_ETAG) {
-			$etag = '"'.fileinode($source_file).'"';
+			$etag = '"'.filemtime($source_file).fileinode($source_file).'"';
 			header("ETag: $etag", true);
 
 			if (DEBUG) {
