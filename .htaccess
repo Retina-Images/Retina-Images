@@ -9,7 +9,7 @@
 	# i.e. http://example.com/index.html
 	#
 	RewriteBase /
-	RewriteRule \.(?:jpe?g|gif|png|bmp)$ /retinaimages.php
+	RewriteRule \.(?:jpe?g|gif|png|bmp)$ /retinaimages.php [L]
 
 	# Option 2
 	# ==================
@@ -17,6 +17,6 @@
 	# i.e. http://example.com/website/directory/index.html
 	#
 	#RewriteBase /website/directory
-	#RewriteRule \.(?:jpe?g|gif|png|bmp)$ /website/directory/retinaimages.php
+	#RewriteRule \.(?:jpe?g|gif|png|bmp)$ /website/directory/retinaimages.php [L]
 
 </IfModule>
