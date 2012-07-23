@@ -13,6 +13,7 @@
     $requested_file = basename($requested_uri);
     $source_file    = $document_root.$requested_uri;
     $source_ext     = strtolower(pathinfo($source_file, PATHINFO_EXTENSION));
+    $cache_directive = 'must-revalidate';
 
     if (DEBUG) {
         $_debug_fh = fopen('retinaimages.log', 'a');
@@ -28,9 +29,17 @@
     // Image was requested
     if (in_array($source_ext, array('png', 'gif', 'jpg', 'jpeg', 'bmp'))) {
 
+        // Check if a cookie is set
+        $cookie_value = false;
+        if (isset($_COOKIE['devicePixelRatio'])) {
+            $cookie_value = intval($_COOKIE['devicePixelRatio']);
+            // Force revalidation of cache on next request
+            $cache_directive = 'no-cache';
+        }
+
         // Check if DPR is high enough to warrant retina image
-        if (DEBUG) { fwrite($_debug_fh, "devicePixelRatio:  {$_COOKIE['devicePixelRatio']}\n"); }
-        if (isset($_COOKIE['devicePixelRatio']) && intval($_COOKIE['devicePixelRatio']) > 1) {
+        if (DEBUG) { fwrite($_debug_fh, "devicePixelRatio:  {$cookie_value}\n"); }
+        if ($cookie_value !== false && $cookie_value > 1) {
             // Check if retina image exists
             $retina_file = pathinfo($source_file, PATHINFO_DIRNAME).'/'.pathinfo($source_file, PATHINFO_FILENAME).'@2x.'.pathinfo($source_file, PATHINFO_EXTENSION);
             if (DEBUG) { fwrite($_debug_fh, "retina_file:       {$retina_file}\n"); }
@@ -42,7 +51,7 @@
 
         // Send cache headers
         if (SEND_CACHE_CONTROL) {
-            header('Cache-Control: private, must-revalidate, max-age='.CACHE_TIME, true);
+            header("Cache-Control: private, {$cache_directive}, max-age=".CACHE_TIME, true);
         }
         if (SEND_EXPIRES) {
             date_default_timezone_set('GMT');
