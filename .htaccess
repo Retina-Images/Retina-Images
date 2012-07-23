@@ -8,7 +8,7 @@
     # Use this if your website runs in the root of the domain.
     # i.e. http://example.com/index.html
     #
-    RewriteBase /WebProjects/Retina-Images/
+    RewriteBase /
     RewriteRule \.(?:jpe?g|gif|png|bmp)$ /retinaimages.php [L]
 
     # Option 2
