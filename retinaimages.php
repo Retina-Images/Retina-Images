@@ -1,6 +1,6 @@
 <?php
 
-    /* Version: 1.3 - now with more cache */
+    /* Version: 1.3.1 - now with better cache */
 
     define('DEBUG',              false);    // Write debugging information to a log file
     define('SEND_ETAG',          true);     // You will want to disable this if you load balance multiple servers
