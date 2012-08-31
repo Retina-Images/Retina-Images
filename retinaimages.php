@@ -1,18 +1,20 @@
 <?php
 
-    /* Version: 1.3.1 - now with better cache */
+    /* Version: 1.4.0 - now with more fours and a zero */
 
     define('DEBUG',              false);    // Write debugging information to a log file
     define('SEND_ETAG',          true);     // You will want to disable this if you load balance multiple servers
     define('SEND_EXPIRES',       true);     //
     define('SEND_CACHE_CONTROL', true);     //
+    define('DOWNSIZE_NOT_FOUND', true);     // If a regular image is requested and not found, send a retina file instead?
     define('CACHE_TIME',         24*60*60); // default: 1 day
 
-    $document_root  = $_SERVER['DOCUMENT_ROOT'];
-    $requested_uri  = parse_url(urldecode($_SERVER['REQUEST_URI']), PHP_URL_PATH);
-    $requested_file = basename($requested_uri);
-    $source_file    = $document_root.$requested_uri;
-    $source_ext     = strtolower(pathinfo($source_file, PATHINFO_EXTENSION));
+    $document_root   = $_SERVER['DOCUMENT_ROOT'];
+    $requested_uri   = parse_url(urldecode($_SERVER['REQUEST_URI']), PHP_URL_PATH);
+    $requested_file  = basename($requested_uri);
+    $source_file     = $document_root.$requested_uri;
+    $source_ext      = strtolower(pathinfo($source_file, PATHINFO_EXTENSION));
+    $retina_file     = pathinfo($source_file, PATHINFO_DIRNAME).'/'.pathinfo($source_file, PATHINFO_FILENAME).'@2x.'.pathinfo($source_file, PATHINFO_EXTENSION);
     $cache_directive = 'must-revalidate';
 
     if (DEBUG) {
@@ -24,6 +26,7 @@
         fwrite($_debug_fh, "requested_file:    {$requested_file}\n");
         fwrite($_debug_fh, "source_file:       {$source_file}\n");
         fwrite($_debug_fh, "source_ext:        {$source_ext}\n");
+        fwrite($_debug_fh, "retina_file:       {$retina_file}\n");
     }
 
     // Image was requested
@@ -33,19 +36,37 @@
         $cookie_value = false;
         if (isset($_COOKIE['devicePixelRatio'])) {
             $cookie_value = intval($_COOKIE['devicePixelRatio']);
+        }
+        else {
             // Force revalidation of cache on next request
             $cache_directive = 'no-cache';
         }
+        if (DEBUG) {
+            fwrite($_debug_fh, "devicePixelRatio:  {$cookie_value}\n");
+            fwrite($_debug_fh, "cache_directive:   {$cache_directive}\n");
+        }
 
         // Check if DPR is high enough to warrant retina image
-        if (DEBUG) { fwrite($_debug_fh, "devicePixelRatio:  {$cookie_value}\n"); }
         if ($cookie_value !== false && $cookie_value > 1) {
             // Check if retina image exists
-            $retina_file = pathinfo($source_file, PATHINFO_DIRNAME).'/'.pathinfo($source_file, PATHINFO_FILENAME).'@2x.'.pathinfo($source_file, PATHINFO_EXTENSION);
-            if (DEBUG) { fwrite($_debug_fh, "retina_file:       {$retina_file}\n"); }
             if (file_exists($retina_file)) {
                 $source_file = $retina_file;
             }
+        }
+
+        // Check if we can shrink a larger version of the image
+        if (!file_exists($source_file) && DOWNSIZE_NOT_FOUND && ($source_file !== $retina_file)) {
+            // Check if retina image exists
+            if (file_exists($retina_file)) {
+                $source_file = $retina_file;
+            }
+        }
+
+        // Check if the image to send exists
+        if (!file_exists($source_file)) {
+            if (DEBUG) { fwrite($_debug_fh, "Image not found. Sending 404\n"); }
+            header('HTTP/1.1 404 Not Found', true);
+            exit();
         }
 
 
