@@ -1,6 +1,6 @@
 <?php
 
-    /* Version: 1.4.0 - now with more fours and a zero */
+    /* Version: 1.4.1 - now with case insensitivity */
 
     define('DEBUG',              false);    // Write debugging information to a log file
     define('SEND_ETAG',          true);     // You will want to disable this if you load balance multiple servers
