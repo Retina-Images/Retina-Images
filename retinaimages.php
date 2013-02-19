@@ -1,16 +1,20 @@
 <?php
 
     /* Version: 1.4.0 - now with more fours and a zero */
-
-    define('DEBUG',              false);    // Write debugging information to a log file
-    define('SEND_ETAG',          true);     // You will want to disable this if you load balance multiple servers
-    define('SEND_EXPIRES',       true);     //
-    define('SEND_CACHE_CONTROL', true);     //
-    define('DOWNSIZE_NOT_FOUND', true);     // If a regular image is requested and not found, send a retina file instead?
-    define('CACHE_TIME',         24*60*60); // default: 1 day
-
+    
+	// Check for Multisite WP install
+	if (isset($_GET['ms']) && $_GET['ms'] === 'true') {
+		define('SHORTINIT', true);
+		require_once(dirname(dirname(dirname(dirname( __FILE__ )))).'/wp-load.php');
+		$file            = rtrim(str_replace('\\', '/', BLOGUPLOADDIR), '/').'/'.str_replace('..', '', $_GET['file']);
+		$requested_uri   = str_replace(str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']), '', $file);
+	}
+	else {
+		$requested_uri = parse_url(urldecode($_SERVER['REQUEST_URI']), PHP_URL_PATH);
+	}
+	
     $document_root   = $_SERVER['DOCUMENT_ROOT'];
-    $requested_uri   = parse_url(urldecode($_SERVER['REQUEST_URI']), PHP_URL_PATH);
+    //$requested_uri   = parse_url(urldecode($_SERVER['REQUEST_URI']), PHP_URL_PATH);
     $requested_file  = basename($requested_uri);
     $source_file     = $document_root.$requested_uri;
     $source_ext      = strtolower(pathinfo($source_file, PATHINFO_EXTENSION));
