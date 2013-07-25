@@ -8,6 +8,7 @@
     define('SEND_CACHE_CONTROL', true);     //
     define('DOWNSIZE_NOT_FOUND', true);     // If a regular image is requested and not found, send a retina file instead?
     define('CACHE_TIME',         24*60*60); // default: 1 day
+    define('DISABLE_RI_HEADER',  false);
 
     $document_root   = $_SERVER['DOCUMENT_ROOT'];
     $requested_uri   = parse_url(urldecode($_SERVER['REQUEST_URI']), PHP_URL_PATH);
@@ -16,6 +17,7 @@
     $source_ext      = strtolower(pathinfo($source_file, PATHINFO_EXTENSION));
     $retina_file     = pathinfo($source_file, PATHINFO_DIRNAME).'/'.pathinfo($source_file, PATHINFO_FILENAME).'@2x.'.pathinfo($source_file, PATHINFO_EXTENSION);
     $cache_directive = 'must-revalidate';
+    $status          = 'regular image';
 
     if (DEBUG) {
         $_debug_fh = fopen('retinaimages.log', 'a');
@@ -40,6 +42,7 @@
         else {
             // Force revalidation of cache on next request
             $cache_directive = 'no-cache';
+            $status = 'no cookie';
         }
         if (DEBUG) {
             fwrite($_debug_fh, "devicePixelRatio:  {$cookie_value}\n");
@@ -51,6 +54,7 @@
             // Check if retina image exists
             if (file_exists($retina_file)) {
                 $source_file = $retina_file;
+                $status = 'retina image';
             }
         }
 
@@ -59,6 +63,7 @@
             // Check if retina image exists
             if (file_exists($retina_file)) {
                 $source_file = $retina_file;
+                $status = 'downsized image';
             }
         }
 
@@ -67,6 +72,11 @@
             if (DEBUG) { fwrite($_debug_fh, "Image not found. Sending 404\n"); }
             header('HTTP/1.1 404 Not Found', true);
             exit();
+        }
+
+        // Attach a Retina Images header for debugging
+        if (!DISABLE_RI_HEADER) {
+            header('X-Retina-Images: '.$status);
         }
 
 
