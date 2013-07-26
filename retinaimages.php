@@ -142,7 +142,7 @@
         $dpr = $_GET['devicePixelRatio'];
 
         // Validate value before setting cookie
-        if (''.intval($dpr) !== $dpr) {
+        if (''.ceil(intval($dpr)) !== $dpr) {
             $dpr = '1';
         }
 
