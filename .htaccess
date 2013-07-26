@@ -9,6 +9,7 @@
     # i.e. http://example.com/index.html
     #
     RewriteBase /
+    RewriteCond %{HTTP:Cookie} devicePixelRatio [NC]
     RewriteRule \.(?:jpe?g|gif|png|bmp)$ /retinaimages.php [NC,L]
 
     # Option 2

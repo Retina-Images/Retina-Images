@@ -1,13 +1,15 @@
 <?php
 
-    /* Version: 1.4.1 - now with case insensitivity */
+    /* Version: 1.5.0 - now with more features */
 
     define('DEBUG',              false);    // Write debugging information to a log file
     define('SEND_ETAG',          true);     // You will want to disable this if you load balance multiple servers
-    define('SEND_EXPIRES',       true);     //
-    define('SEND_CACHE_CONTROL', true);     //
+    define('SEND_EXPIRES',       true);
+    define('SEND_CACHE_CONTROL', true);
+    define('USE_X_SENDFILE',     false);    // This will reduce memory usage, but isn't enabled on all systems. If you have issues enabling this setting, contact your host
     define('DOWNSIZE_NOT_FOUND', true);     // If a regular image is requested and not found, send a retina file instead?
-    define('CACHE_TIME',         24*60*60); // default: 1 day
+    define('CACHE_TIME',         24*60*60); // 1 day
+    define('DISABLE_RI_HEADER',  false);
 
     $document_root   = $_SERVER['DOCUMENT_ROOT'];
     $requested_uri   = parse_url(urldecode($_SERVER['REQUEST_URI']), PHP_URL_PATH);
@@ -16,6 +18,7 @@
     $source_ext      = strtolower(pathinfo($source_file, PATHINFO_EXTENSION));
     $retina_file     = pathinfo($source_file, PATHINFO_DIRNAME).'/'.pathinfo($source_file, PATHINFO_FILENAME).'@2x.'.pathinfo($source_file, PATHINFO_EXTENSION);
     $cache_directive = 'must-revalidate';
+    $status          = 'regular image';
 
     if (DEBUG) {
         $_debug_fh = fopen('retinaimages.log', 'a');
@@ -40,6 +43,7 @@
         else {
             // Force revalidation of cache on next request
             $cache_directive = 'no-cache';
+            $status = 'no cookie';
         }
         if (DEBUG) {
             fwrite($_debug_fh, "devicePixelRatio:  {$cookie_value}\n");
@@ -51,6 +55,7 @@
             // Check if retina image exists
             if (file_exists($retina_file)) {
                 $source_file = $retina_file;
+                $status = 'retina image';
             }
         }
 
@@ -59,6 +64,7 @@
             // Check if retina image exists
             if (file_exists($retina_file)) {
                 $source_file = $retina_file;
+                $status = 'downsized image';
             }
         }
 
@@ -69,6 +75,10 @@
             exit();
         }
 
+        // Attach a Retina Images header for debugging
+        if (!DISABLE_RI_HEADER) {
+            header('X-Retina-Images: '.$status);
+        }
 
         // Send cache headers
         if (SEND_CACHE_CONTROL) {
@@ -117,7 +127,12 @@
         }
 
         // Send file
-        readfile($source_file);
+        if (USE_X_SENDFILE) {
+            header('X-Sendfile: '.$source_file);
+        }
+        else {
+            readfile($source_file);
+        }
         exit();
     }
 
@@ -126,7 +141,7 @@
         $dpr = $_GET['devicePixelRatio'];
 
         // Validate value before setting cookie
-        if (''.intval($dpr) !== $dpr) {
+        if (''.ceil(intval($dpr)) !== $dpr) {
             $dpr = '1';
         }
 
