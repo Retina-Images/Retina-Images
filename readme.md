@@ -1,3 +1,8 @@
+Retina Images - WordPress Branch
+================================
+
+This branch contains WordPress specific code. It is mainly available for the development of the [WP Retina 2x](http://wordpress.org/extend/plugins/wp-retina-2x/) WordPress plugin.
+
 Retina Images
 =============
 
