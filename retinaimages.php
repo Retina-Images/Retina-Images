@@ -6,8 +6,9 @@
     define('SEND_ETAG',          true);     // You will want to disable this if you load balance multiple servers
     define('SEND_EXPIRES',       true);
     define('SEND_CACHE_CONTROL', true);
+    define('USE_X_SENDFILE',     false);    // This will reduce memory usage, but isn't enabled on all systems. If you have issues enabling this setting, contact your host
     define('DOWNSIZE_NOT_FOUND', true);     // If a regular image is requested and not found, send a retina file instead?
-    define('CACHE_TIME',         24*60*60); // default: 1 day
+    define('CACHE_TIME',         24*60*60); // 1 day
     define('DISABLE_RI_HEADER',  false);
 
     $document_root   = $_SERVER['DOCUMENT_ROOT'];
@@ -127,7 +128,12 @@
         }
 
         // Send file
-        readfile($source_file);
+        if (USE_X_SENDFILE) {
+            header('X-Sendfile: '.$source_file);
+        }
+        else {
+            readfile($source_file);
+        }
         exit();
     }
 
