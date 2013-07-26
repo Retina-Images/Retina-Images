@@ -80,7 +80,6 @@
             header('X-Retina-Images: '.$status);
         }
 
-
         // Send cache headers
         if (SEND_CACHE_CONTROL) {
             header("Cache-Control: private, {$cache_directive}, max-age=".CACHE_TIME, true);
