@@ -1,6 +1,6 @@
 <?php
 
-    /* Version: 1.5.0 - now with more features */
+    /* Version: 1.6.0 - now with more pixels */
 
     define('DEBUG',              false);    // Write debugging information to a log file
     define('SEND_ETAG',          true);     // You will want to disable this if you load balance multiple servers
@@ -16,7 +16,8 @@
     $requested_file  = basename($requested_uri);
     $source_file     = $document_root.$requested_uri;
     $source_ext      = strtolower(pathinfo($source_file, PATHINFO_EXTENSION));
-    $retina_file     = pathinfo($source_file, PATHINFO_DIRNAME).'/'.pathinfo($source_file, PATHINFO_FILENAME).'@2x.'.pathinfo($source_file, PATHINFO_EXTENSION);
+    $at2x_file       = pathinfo($source_file, PATHINFO_DIRNAME).'/'.pathinfo($source_file, PATHINFO_FILENAME).'@2x.'.pathinfo($source_file, PATHINFO_EXTENSION);
+    $at3x_file       = pathinfo($source_file, PATHINFO_DIRNAME).'/'.pathinfo($source_file, PATHINFO_FILENAME).'@3x.'.pathinfo($source_file, PATHINFO_EXTENSION);
     $cache_directive = 'must-revalidate';
     $status          = 'regular image';
 
@@ -29,7 +30,8 @@
         fwrite($_debug_fh, "requested_file:    {$requested_file}\n");
         fwrite($_debug_fh, "source_file:       {$source_file}\n");
         fwrite($_debug_fh, "source_ext:        {$source_ext}\n");
-        fwrite($_debug_fh, "retina_file:       {$retina_file}\n");
+        fwrite($_debug_fh, "@2x_file:          {$at2x_file}\n");
+        fwrite($_debug_fh, "@3x_file:          {$at3x_file}\n");
     }
 
     // Image was requested
@@ -50,20 +52,36 @@
             fwrite($_debug_fh, "cache_directive:   {$cache_directive}\n");
         }
 
-        // Check if DPR is high enough to warrant retina image
-        if ($cookie_value !== false && $cookie_value > 1) {
+        // Check if DPR is high enough to warrant 3x image
+        if ($cookie_value !== false && $cookie_value > 2) {
             // Check if retina image exists
-            if (file_exists($retina_file)) {
-                $source_file = $retina_file;
+            if (file_exists($at3x_file)) {
+                $source_file = $at3x_file;
+                $status = 'retina image';
+            }
+        }
+        // Check if DPR is high enough to warrant 2x image
+        elseif ($cookie_value !== false && $cookie_value > 1) {
+            // Check if retina image exists
+            if (file_exists($at2x_file)) {
+                $source_file = $at2x_file;
                 $status = 'retina image';
             }
         }
 
         // Check if we can shrink a larger version of the image
-        if (!file_exists($source_file) && DOWNSIZE_NOT_FOUND && ($source_file !== $retina_file)) {
+        if (!file_exists($source_file) && DOWNSIZE_NOT_FOUND && ($source_file !== $at2x_file)) {
             // Check if retina image exists
-            if (file_exists($retina_file)) {
-                $source_file = $retina_file;
+            if (file_exists($at2x_file)) {
+                $source_file = $at2x_file;
+                $status = 'downsized image';
+            }
+        }
+        // Check if we can shrink a larger version of the image
+        elseif (!file_exists($source_file) && DOWNSIZE_NOT_FOUND && ($source_file !== $at3x_file)) {
+            // Check if retina image exists
+            if (file_exists($at3x_file)) {
+                $source_file = $at3x_file;
                 $status = 'downsized image';
             }
         }
@@ -112,7 +130,7 @@
         }
 
         // Send image headers
-        if (in_array($source_ext, array('png', 'gif', 'jpeg', 'bmp'))) {
+        if (in_array($source_ext, ['png', 'gif', 'jpeg', 'bmp'])) {
             header("Content-Type: image/".$source_ext, true);
         }
         else {
