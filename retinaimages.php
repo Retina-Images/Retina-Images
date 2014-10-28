@@ -130,7 +130,7 @@
         }
 
         // Send image headers
-        if (in_array($source_ext, ['png', 'gif', 'jpeg', 'bmp'])) {
+        if (in_array($source_ext, array('png', 'gif', 'jpeg', 'bmp'))) {
             header("Content-Type: image/".$source_ext, true);
         }
         else {
