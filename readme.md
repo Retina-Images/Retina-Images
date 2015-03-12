@@ -19,7 +19,7 @@ How it Works
 Installation & Examples
 -----------------------
 
-Visit [http://retina-images.complexcompulsions.com](http://retina-images.complexcompulsions.com) for installation instructions and a set of demonstrations.
+Visit [http://retinaimag.es](http://retinaimag.es) for installation instructions and a set of demonstrations.
 
 Benfits
 -------
@@ -33,7 +33,7 @@ Drawbacks
 ---------
 
 - `<img>` tags must have either a width or height attribute specified.
-- CSS background images must have a background-size property. See [CSS Images](http://retina-images.complexcompulsions.com#setupcss) for details.
+- CSS background images must have a background-size property. See [CSS Images](http://retinaimag.es#setupcss) for details.
 
 License
 -------
