@@ -60,10 +60,9 @@
             // Check over images and match the largest resolution available
             foreach (array($at4x_file => 3, $at3x_file => 2, $at2x_file => 1) as $retina_file => $min_dpr) {
                 if ($cookie_value > $min_dpr && file_exists($retina_file)) {
-                        $source_file = $retina_file;
-                        $status = 'retina image';
-                        break;
-                    }
+                    $source_file = $retina_file;
+                    $status = 'retina image';
+                    break;
                 }
             }
         }
@@ -73,10 +72,9 @@
             // Check over increasingly larger images and see if one is available
             foreach (array($at2x_file, $at3x_file, $at4x_file) as $retina_file) {
                 if (file_exists($retina_file)) {
-                        $source_file = $retina_file;
-                        $status = 'downsized image';
-                        break;
-                    }
+                    $source_file = $retina_file;
+                    $status = 'downsized image';
+                    break;
                 }
             }
         }
