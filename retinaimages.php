@@ -89,6 +89,9 @@
         // Check if the image to send exists
         if (!file_exists($source_file)) {
             if (DEBUG) { fwrite($_debug_fh, "Image not found. Sending 404\n"); }
+            if (!DISABLE_RI_HEADER) {
+                header('X-Retina-Images: not found');
+            }
             header('HTTP/1.1 404 Not Found', true);
             exit();
         }
