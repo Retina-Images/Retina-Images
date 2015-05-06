@@ -1,6 +1,6 @@
 <?php
 
-    /* Version: 1.6.0 - now with more pixels */
+    /* Version: 1.7.0 - now with even more pixels */
 
     define('DEBUG',              false);    // Write debugging information to a log file
     define('SEND_ETAG',          true);     // You will want to disable this if you load balance multiple servers
