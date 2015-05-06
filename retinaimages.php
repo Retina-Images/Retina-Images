@@ -18,6 +18,7 @@
     $source_ext      = strtolower(pathinfo($source_file, PATHINFO_EXTENSION));
     $at2x_file       = pathinfo($source_file, PATHINFO_DIRNAME).'/'.pathinfo($source_file, PATHINFO_FILENAME).'@2x.'.pathinfo($source_file, PATHINFO_EXTENSION);
     $at3x_file       = pathinfo($source_file, PATHINFO_DIRNAME).'/'.pathinfo($source_file, PATHINFO_FILENAME).'@3x.'.pathinfo($source_file, PATHINFO_EXTENSION);
+    $at4x_file       = pathinfo($source_file, PATHINFO_DIRNAME).'/'.pathinfo($source_file, PATHINFO_FILENAME).'@4x.'.pathinfo($source_file, PATHINFO_EXTENSION);
     $cache_directive = 'must-revalidate';
     $status          = 'regular image';
 
@@ -52,37 +53,29 @@
             fwrite($_debug_fh, "cache_directive:   {$cache_directive}\n");
         }
 
-        // Check if DPR is high enough to warrant 3x image
-        if ($cookie_value !== false && $cookie_value > 2) {
-            // Check if retina image exists
-            if (file_exists($at3x_file)) {
-                $source_file = $at3x_file;
-                $status = 'retina image';
-            }
-        }
-        // Check if DPR is high enough to warrant 2x image
-        elseif ($cookie_value !== false && $cookie_value > 1) {
-            // Check if retina image exists
-            if (file_exists($at2x_file)) {
-                $source_file = $at2x_file;
-                $status = 'retina image';
+        // No need to check for retina images if screen is low DPR
+        if ($cookie_value !== false && $cookie_value > 1) {
+            // Check over images and match the largest resolution available
+            foreach (array($at4x_file => 3, $at3x_file => 2, $at2x_file => 1) as $retina_file => $min_dpr) {
+                if ($cookie_value > $min_dpr && file_exists($retina_file)) {
+                        $source_file = $retina_file;
+                        $status = 'retina image';
+                        break;
+                    }
+                }
             }
         }
 
         // Check if we can shrink a larger version of the image
-        if (!file_exists($source_file) && DOWNSIZE_NOT_FOUND && ($source_file !== $at2x_file)) {
-            // Check if retina image exists
-            if (file_exists($at2x_file)) {
-                $source_file = $at2x_file;
-                $status = 'downsized image';
-            }
-        }
-        // Check if we can shrink a larger version of the image
-        elseif (!file_exists($source_file) && DOWNSIZE_NOT_FOUND && ($source_file !== $at3x_file)) {
-            // Check if retina image exists
-            if (file_exists($at3x_file)) {
-                $source_file = $at3x_file;
-                $status = 'downsized image';
+        if (!file_exists($source_file) && DOWNSIZE_NOT_FOUND){
+            // Check over increasingly larger images and see if one is available
+            foreach (array($at2x_file, $at3x_file, $at4x_file) as $retina_file) {
+                if (file_exists($retina_file)) {
+                        $source_file = $retina_file;
+                        $status = 'downsized image';
+                        break;
+                    }
+                }
             }
         }
 
