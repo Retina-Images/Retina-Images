@@ -15,10 +15,12 @@
     $requested_uri   = parse_url(urldecode($_SERVER['REQUEST_URI']), PHP_URL_PATH);
     $requested_file  = basename($requested_uri);
     $source_file     = $document_root.$requested_uri;
+    $source_dirname  = strtolower(pathinfo($source_file, PATHINFO_DIRNAME));
+    $source_filename = strtolower(pathinfo($source_file, PATHINFO_FILENAME));
     $source_ext      = strtolower(pathinfo($source_file, PATHINFO_EXTENSION));
-    $at2x_file       = pathinfo($source_file, PATHINFO_DIRNAME).'/'.pathinfo($source_file, PATHINFO_FILENAME).'@2x.'.pathinfo($source_file, PATHINFO_EXTENSION);
-    $at3x_file       = pathinfo($source_file, PATHINFO_DIRNAME).'/'.pathinfo($source_file, PATHINFO_FILENAME).'@3x.'.pathinfo($source_file, PATHINFO_EXTENSION);
-    $at4x_file       = pathinfo($source_file, PATHINFO_DIRNAME).'/'.pathinfo($source_file, PATHINFO_FILENAME).'@4x.'.pathinfo($source_file, PATHINFO_EXTENSION);
+    $at2x_file       = $source_dirname.'/'.$source_filename.'@2x.'.$source_ext;
+    $at3x_file       = $source_dirname.'/'.$source_filename.'@3x.'.$source_ext;
+    $at4x_file       = $source_dirname.'/'.$source_filename.'@4x.'.$source_ext;
     $cache_directive = 'must-revalidate';
     $status          = 'regular image';
 
