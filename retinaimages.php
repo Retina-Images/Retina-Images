@@ -1,6 +1,6 @@
 <?php
 
-    /* Version: 1.7.0 - now with even more pixels */
+    /* Version: 1.7.1 - now with even more pixels */
 
     define('DEBUG',              false);    // Write debugging information to a log file
     define('SEND_ETAG',          true);     // You will want to disable this if you load balance multiple servers
@@ -59,7 +59,7 @@
         if ($cookie_value !== false && $cookie_value > 1) {
             // Check over images and match the largest resolution available
             foreach (array($at4x_file => 3, $at3x_file => 2, $at2x_file => 1) as $retina_file => $min_dpr) {
-                if ($cookie_value => $min_dpr && file_exists($retina_file)) {
+                if ($cookie_value >= $min_dpr && file_exists($retina_file)) {
                     $source_file = $retina_file;
                     $status = 'retina image';
                     break;
