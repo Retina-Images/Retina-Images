@@ -35,6 +35,7 @@
         fwrite($_debug_fh, "source_ext:        {$source_ext}\n");
         fwrite($_debug_fh, "@2x_file:          {$at2x_file}\n");
         fwrite($_debug_fh, "@3x_file:          {$at3x_file}\n");
+        fwrite($_debug_fh, "@4x_file:          {$at4x_file}\n");
     }
 
     // Image was requested
