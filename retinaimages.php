@@ -1,6 +1,6 @@
 <?php
 
-    /* Version: 1.7.1 - now with even more pixels */
+    /* Version: 1.7.2 - now with even more pixels */
 
     define('DEBUG',              false);    // Write debugging information to a log file
     define('SEND_ETAG',          true);     // You will want to disable this if you load balance multiple servers
@@ -15,9 +15,9 @@
     $requested_uri   = parse_url(urldecode($_SERVER['REQUEST_URI']), PHP_URL_PATH);
     $requested_file  = basename($requested_uri);
     $source_file     = $document_root.$requested_uri;
-    $source_dirname  = strtolower(pathinfo($source_file, PATHINFO_DIRNAME));
-    $source_filename = strtolower(pathinfo($source_file, PATHINFO_FILENAME));
-    $source_ext      = strtolower(pathinfo($source_file, PATHINFO_EXTENSION));
+    $source_dirname  = pathinfo($source_file, PATHINFO_DIRNAME);
+    $source_filename = pathinfo($source_file, PATHINFO_FILENAME);
+    $source_ext      = pathinfo($source_file, PATHINFO_EXTENSION);
     $at2x_file       = $source_dirname.'/'.$source_filename.'@2x.'.$source_ext;
     $at3x_file       = $source_dirname.'/'.$source_filename.'@3x.'.$source_ext;
     $at4x_file       = $source_dirname.'/'.$source_filename.'@4x.'.$source_ext;
@@ -35,6 +35,7 @@
         fwrite($_debug_fh, "source_ext:        {$source_ext}\n");
         fwrite($_debug_fh, "@2x_file:          {$at2x_file}\n");
         fwrite($_debug_fh, "@3x_file:          {$at3x_file}\n");
+        fwrite($_debug_fh, "@4x_file:          {$at4x_file}\n");
     }
 
     // Image was requested
@@ -59,7 +60,7 @@
         if ($cookie_value !== false && $cookie_value > 1) {
             // Check over images and match the largest resolution available
             foreach (array($at4x_file => 3, $at3x_file => 2, $at2x_file => 1) as $retina_file => $min_dpr) {
-                if ($cookie_value >= $min_dpr && file_exists($retina_file)) {
+                if ($cookie_value > $min_dpr && file_exists($retina_file)) {
                     $source_file = $retina_file;
                     $status = 'retina image';
                     break;
