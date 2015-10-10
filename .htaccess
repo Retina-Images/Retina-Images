@@ -15,10 +15,10 @@
     # Option 2
     # ==================
     # Use this if your website runs in a sub-directory.
-    # i.e. http://example.com/website/directory/index.html
+    # i.e. http://example.com/~username/index.html
     #
-    #RewriteBase /website/directory
+    #RewriteBase /~username
     #RewriteCond %{HTTP:Cookie} devicePixelRatio [NC]
-    #RewriteRule \.(?:jpe?g|gif|png|bmp)$ /website/directory/retinaimages.php [NC,L]
+    #RewriteRule \.(?:jpe?g|gif|png|bmp)$ /retinaimages.php [NC,L]
 
 </IfModule>
