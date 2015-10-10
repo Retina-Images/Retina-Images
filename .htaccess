@@ -18,6 +18,7 @@
     # i.e. http://example.com/website/directory/index.html
     #
     #RewriteBase /website/directory
+    #RewriteCond %{HTTP:Cookie} devicePixelRatio [NC]
     #RewriteRule \.(?:jpe?g|gif|png|bmp)$ /website/directory/retinaimages.php [NC,L]
 
 </IfModule>
