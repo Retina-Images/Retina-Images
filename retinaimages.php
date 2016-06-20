@@ -12,7 +12,7 @@
     define('DISABLE_RI_HEADER',  false);
 
     $document_root   = $_SERVER['DOCUMENT_ROOT'];
-    $requested_uri   = parse_url(urldecode($_SERVER['REQUEST_URI']), PHP_URL_PATH);
+    $requested_uri   = parse_url(urldecode(!empty($_SERVER['REDIRECT_URL']) ? $_SERVER['REDIRECT_URL'] : $_SERVER['REQUEST_URI']), PHP_URL_PATH);
     $requested_file  = basename($requested_uri);
     $source_file     = $document_root.$requested_uri;
     $source_dirname  = pathinfo($source_file, PATHINFO_DIRNAME);
