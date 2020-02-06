@@ -161,6 +161,10 @@
         }
 
         setcookie('devicePixelRatio', $dpr);
+
+        // return 1px transparent image
+        header('Content-Type: image/png');
+        echo base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=');
         exit();
     }
 
